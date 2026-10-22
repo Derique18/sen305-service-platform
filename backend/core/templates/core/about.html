@@ -1,0 +1,19 @@
+{% extends "core/base.html" %}
+{% block title %}About | VUA ServiceDesk{% endblock %}
+{% block content %}
+<section class="page-heading">
+    <p class="eyebrow">About the semester project</p>
+    <h1>One platform for reporting and resolving service needs</h1>
+    <p>The project will grow each week from these public pages into a secure enterprise application with workflows, APIs and reporting.</p>
+</section>
+<section>
+    <h2>System roles</h2>
+    <ul class="role-list">
+    {% for role in project_roles %}
+        <li>{{ role }}</li>
+    {% empty %}
+        <li>No roles have been defined.</li>
+    {% endfor %}
+    </ul>
+</section>
+{% endblock %}

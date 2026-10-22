@@ -1,0 +1,10 @@
+cat << 'EOF' > .gitignore
+.venv/
+__pycache__/
+*.py[cod]
+backend/db.sqlite3
+.env
+.vscode/
+.idea/
+node_modules/
+EOF

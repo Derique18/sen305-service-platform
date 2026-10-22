@@ -1,0 +1,14 @@
+{% extends "core/base.html" %}
+{% block title %}Home | VUA ServiceDesk{% endblock %}
+{% block content %}
+<section class="hero">
+    <p class="eyebrow">Enterprise Service Request Platform</p>
+    <h1>{{ headline }}</h1>
+    <p>Submit a maintenance request, follow its progress and receive clear updates from the assigned team.</p>
+    <a class="button" href="{% url 'core:workflow' %}">View request workflow</a>
+</section>
+<section id="request-preview" class="status-panel">
+    <h2>Platform status</h2>
+    <p>Active requests in this training environment: <strong>{{ active_requests }}</strong></p>
+</section>
+{% endblock %}
