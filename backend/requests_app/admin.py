@@ -1,5 +1,27 @@
 from django.contrib import admin
+from django.utils import timezone
 from .models import Category, Comment, ServiceRequest, WorkOrder
+
+
+class OverdueFilter(admin.SimpleListFilter):
+    title = "overdue status"
+    parameter_name = "overdue"
+
+    def lookups(self, request, model_admin):
+        return (
+            ("yes", "Overdue"),
+            ("no", "Not overdue"),
+        )
+
+    def queryset(self, request, queryset):
+        now = timezone.now()
+        if self.value() == "yes":
+            return queryset.filter(due_at__lt=now).exclude(
+                status__in=[ServiceRequest.Status.RESOLVED, ServiceRequest.Status.CLOSED]
+            )
+        if self.value() == "no":
+            return queryset.filter(due_at__gte=now)
+        return queryset
 
 
 @admin.register(Category)
@@ -27,7 +49,7 @@ class ServiceRequestAdmin(admin.ModelAdmin):
         "due_at",
         "created_at",
     )
-    list_filter = ("status", "priority", "category", "due_at")
+    list_filter = ("status", "priority", "category", OverdueFilter, "due_at")
     search_fields = (
         "title",
         "description",
