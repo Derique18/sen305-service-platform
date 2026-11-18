@@ -1,0 +1,62 @@
+{% extends "core/base.html" %}
+{% block title %}Service requests{% endblock %}
+{% block content %}
+<header class="page-header">
+  <h1>Service requests</h1>
+  <a class="button" href="{% url 'requests:create' %}">New request</a>
+</header>
+
+<div class="summary-counts" style="display:flex; gap:1rem; margin:1rem 0;">
+  <span><strong>Open:</strong> {{ counts.open_count }}</span>
+  <span><strong>Assigned:</strong> {{ counts.assigned_count }}</span>
+  <span><strong>Resolved:</strong> {{ counts.resolved_count }}</span>
+</div>
+
+<form method="get" class="filters">
+  <label>Search <input name="q" value="{{ query }}"></label>
+  <label>Status
+    <select name="status">
+      <option value="">All</option>
+      {% for value, label in status_choices %}
+        <option value="{{ value }}" {% if selected_status == value %}selected{% endif %}>{{ label }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <button type="submit">Apply</button>
+</form>
+
+<table class="data-table">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Category</th>
+      <th>Priority</th>
+      <th>Status</th>
+      <th>Comments</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in page_obj %}
+      <tr>
+        <td><a href="{% url 'requests:detail' item.id %}">{{ item.title }}</a></td>
+        <td>{{ item.category }}</td>
+        <td>{{ item.priority }}</td>
+        <td>{{ item.get_status_display }}</td>
+        <td>{{ item.comment_count }}</td>
+      </tr>
+    {% empty %}
+      <tr><td colspan="5">No matching requests.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+<nav aria-label="Request pages" style="margin-top:1rem;">
+  {% if page_obj.has_previous %}
+    <a href="?{% if filter_query %}{{ filter_query }}&{% endif %}page={{ page_obj.previous_page_number }}">Previous</a>
+  {% endif %}
+  <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+  {% if page_obj.has_next %}
+    <a href="?{% if filter_query %}{{ filter_query }}&{% endif %}page={{ page_obj.next_page_number }}">Next</a>
+  {% endif %}
+</nav>
+{% endblock %}

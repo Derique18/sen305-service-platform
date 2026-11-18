@@ -1,0 +1,70 @@
+{% extends "core/base.html" %}
+{% block title %}{{ item.title }}{% endblock %}
+{% block content %}
+<p><a href="{% url 'requests:list' %}">&larr; All requests</a></p>
+<h1>{{ item.title }}</h1>
+
+<dl class="request-meta">
+  <dt>Status</dt><dd>{{ item.get_status_display }}</dd>
+  <dt>Priority</dt><dd>{{ item.priority }}</dd>
+  <dt>Category</dt><dd>{{ item.category }}</dd>
+  <dt>Location</dt><dd>{{ item.location }}</dd>
+  <dt>Requester</dt><dd>{{ item.requester.username }}</dd>
+  {% if work_order %}
+    <dt>Technician</dt><dd>{{ work_order.technician.username }}</dd>
+  {% endif %}
+  {% if item.resolved_at %}
+    <dt>Resolved at</dt><dd>{{ item.resolved_at|date:"d M Y H:i" }}</dd>
+  {% endif %}
+</dl>
+
+<h2>Description</h2>
+<p>{{ item.description|linebreaksbr }}</p>
+
+{% if item.resolution_summary %}
+  <h2>Resolution Summary</h2>
+  <p>{{ item.resolution_summary|linebreaksbr }}</p>
+{% endif %}
+
+<p><a class="button" href="{% url 'requests:update' item.id %}">Edit request</a></p>
+
+{% if user.is_staff %}
+  <section style="margin:1.5rem 0; padding:1rem; border:1px solid #d6dbe2;">
+    <h3>Assign Technician (Staff Only)</h3>
+    <form method="post" action="{% url 'requests:assign' item.id %}">
+      {% csrf_token %}
+      {{ assign_form.as_p }}
+      <button type="submit">Assign Technician</button>
+    </form>
+  </section>
+{% endif %}
+
+{% if can_resolve %}
+  <section style="margin:1.5rem 0; padding:1rem; border:1px solid #d6dbe2;">
+    <h3>Resolve Service Request</h3>
+    <form method="post" action="{% url 'requests:resolve' item.id %}">
+      {% csrf_token %}
+      {{ resolve_form.as_p }}
+      <button type="submit">Mark as Resolved</button>
+    </form>
+  </section>
+{% endif %}
+
+<h2>Comments</h2>
+{% for comment in comments %}
+  <article class="comment">
+    <strong>{{ comment.author.username }}</strong>
+    <time>{{ comment.created_at|date:"d M Y H:i" }}</time>
+    <p>{{ comment.body|linebreaksbr }}</p>
+  </article>
+{% empty %}
+  <p>No comments yet.</p>
+{% endfor %}
+
+<h3>Add a comment</h3>
+<form method="post" action="{% url 'requests:comment-add' item.id %}">
+  {% csrf_token %}
+  {{ comment_form.as_p }}
+  <button type="submit">Add comment</button>
+</form>
+{% endblock %}
