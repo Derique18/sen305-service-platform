@@ -1,0 +1,16 @@
+
+.page-header { display: flex; justify-content: space-between; align-items: center; gap: 1rem; }
+.filters { display: flex; flex-wrap: wrap; gap: 1rem; align-items: end; margin: 1rem 0; }
+.form-row { margin-bottom: 1rem; }
+.form-row label { display: block; font-weight: 600; margin-bottom: .25rem; }
+.form-control, input, select, textarea { width: 100%; max-width: 42rem; padding: .6rem; }
+.data-table { width: 100%; border-collapse: collapse; }
+.data-table th, .data-table td { border: 1px solid #d6dbe2; padding: .65rem; text-align: left; }
+.request-meta { display: grid; grid-template-columns: 8rem 1fr; gap: .4rem 1rem; }
+.request-meta dt { font-weight: 700; }
+.comment { border-left: 4px solid #17365d; padding: .5rem 1rem; margin: 1rem 0; background: #f5f7fa; }
+.message { padding: .75rem; border-radius: .25rem; }
+.message.success { background: #e5f6ea; color: #174d28; }
+.message.error, .error { color: #8a1c1c; }
+.nav-form { display: inline; }
+.nav-form button { background: none; border: 0; color: inherit; text-decoration: underline; cursor: pointer; }

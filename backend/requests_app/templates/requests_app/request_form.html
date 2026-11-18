@@ -1,0 +1,17 @@
+{% extends "core/base.html" %}
+{% block title %}{{ mode }} request{% endblock %}
+{% block content %}
+<h1>{{ mode }} service request</h1>
+<form method="post" novalidate>
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  {% for field in form %}
+    <div class="form-row">
+      {{ field.label_tag }} {{ field }}
+      {% for error in field.errors %}<p class="error">{{ error }}</p>{% endfor %}
+    </div>
+  {% endfor %}
+  <button type="submit">Save request</button>
+  <a href="{% url 'requests:list' %}">Cancel</a>
+</form>
+{% endblock %}
